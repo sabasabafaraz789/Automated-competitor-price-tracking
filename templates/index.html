@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dermacos Products</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .product-card {
+      transition: transform 0.3s, box-shadow 0.3s;
+      height: 100%;
+      border: 1px solid #e9ecef;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+      height: 200px;
+      object-fit: contain;
+      padding: 10px;
+      background-color: #f8f9fa;
+    }
+
+    .price-tag {
+      font-weight: bold;
+      color: #dc3545;
+      font-size: 1.2rem;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-text {
+      flex-grow: 1;
+    }
+
+    .product-meta {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+
+    .empty-link {
+      color: #6c757d;
+      font-style: italic;
+      background-color: #f8f9fa;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px dashed #dee2e6;
+    }
+
+    .header-section {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .filter-section {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .footer {
+      background-color: #343a40;
+      color: white;
+      padding: 2rem 0;
+      margin-top: 3rem;
+    }
+
+    .badge-custom {
+      background-color: #6f42c1;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Section -->
+  <header class="header-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1><i class="fas fa-shopping-bag me-2"></i>Dermacos Products</h1>
+          <p class="lead">Premium skincare products for smooth and soft skin</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <button class="btn btn-light me-2"><i class="fas fa-search me-1"></i> Search</button>
+          <button class="btn btn-outline-light"><i class="fas fa-user me-1"></i> Account</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <label for="priceFilter" class="form-label">Filter by Price</label>
+          <select class="form-select" id="priceFilter">
+            <option selected>All Prices</option>
+            <option>Under Rs. 700</option>
+            <option>Rs. 700 - Rs. 750</option>
+            <option>Above Rs. 750</option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-2">
+          <label for="sortBy" class="form-label">Sort By</label>
+          <select class="form-select" id="sortBy">
+            <option selected>Featured</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Name: A to Z</option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-2 d-flex align-items-end">
+          <button class="btn btn-primary w-100"><i class="fas fa-filter me-1"></i> Apply Filters</button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+<div class="container py-5">
+  <h1 class="mb-4 text-center">Dermacos Products</h1>
+
+  <!-- Scrape Button -->
+  <form method="POST" class="mb-4 text-center">
+    <button type="submit" name="scrape" class="btn btn-warning btn-lg">
+      <i class="fas fa-database me-1"></i> Scrape Competitors Products Prices  
+    </button>
+  </form>
+
+  {% if message %}
+  <div class="alert alert-info text-center">
+    {{ message }}
+  </div>
+  {% endif %}
+
+  {% if stats %}
+  <div class="card mt-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title text-center">📊 Competitors Price Statistics</h5>
+      <pre class="bg-light p-3 rounded">{{ stats | tojson(indent=2) }}</pre>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+
+
+
+
+
+
+
+<div class="filter-section mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="POST" id="priceForm" style="margin-bottom:20px;">
+                <label for="priceOption" class="form-label">Select Price Option</label>
+                <select class="form-select" id="priceOption" name="priceOption">
+                    <option value="" selected disabled>Select option</option>
+                    <option value="average">Average Price</option>
+                    <option value="min">Minimum Price</option>
+                    <option value="max">Maximum Price</option>
+                </select>
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+            <button type="submit" class="btn btn-success w-100">
+                <i class="fas fa-sync-alt me-1"></i> Update Prices
+            </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <!-- Products Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <!-- Product 1 -->
+      <div class="col">
+        <div class="card product-card h-100">
+          <div class="position-relative">
+            <img src="https://img.drz.lazcdn.com/static/pk/p/5a0390493fab19e6ccbd4349994fcfa7.png_400x400q75.avif"
+              class="card-img-top product-image" alt="Dermacos Glow Cleanser">
+            <span class="position-absolute top-0 start-0 m-2 badge bg-success">In Stock</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Dermacos Glow Cleanser " Deep Exfoliating Cleanser for Smooth & Soft Skin - 200g Jar
+            </h5>
+            <p class="card-text">Deep exfoliating cleanser for smooth and soft skin. Perfect for daily use to remove
+              impurities and reveal radiant skin.</p>
+            <div class="product-meta mb-2">
+              <div><strong>SKU:</strong> 923211917_PK-3979620198</div>
+              <div><strong>Item ID:</strong> 923211917</div>
+            </div>
+            <div class="mt-auto">
+              <!-- <p class="price-tag">Rs. 750</p> -->
+              <p class="price-tag">Rs. <span class="priceValue">749</span></p>
+              <div class="d-grid gap-2">
+                <a href="https://www.daraz.pk/products/dermacos-glow-cleanser-deep-exfoliating-cleanser-for-smooth-soft-skin-200g-jar-i923211917.html"
+                  class="btn btn-primary" target="_blank">
+                  <i class="fas fa-shopping-cart me-1"></i> Buy Now
+                </a>
+                <!-- Empty link field with comment -->
+                <a href="#" class="empty-link">
+                  <!-- Add product comparison link here when available -->
+                  <i class="fas fa-balance-scale me-1"></i> Add to Compare (Link not available)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="col">
+        <div class="card product-card h-100">
+          <div class="position-relative">
+            <!-- Using a placeholder image for product 2 -->
+            <img
+              src="https://readytrays.com/cdn/shop/products/images_100_c0d59ff0-307b-48c6-9b80-b409e92cac9d_1024x.jpg?v=1685017430"
+              class="card-img-top product-image" alt="Dermacos Glow Cleanser">
+            <span class="position-absolute top-0 start-0 m-2 badge bg-success">In Stock</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Dermacos Glow Cleanser " Deep Exfoliating Cleanser for Smooth & Soft Skin - 200g Jar
+            </h5>
+            <p class="card-text">Deep exfoliating cleanser for smooth and soft skin. Perfect for daily use to remove
+              impurities and reveal radiant skin.</p>
+            <div class="product-meta mb-2">
+              <div><strong>SKU:</strong> 889035462_PK-3922904364</div>
+              <div><strong>Item ID:</strong> 889035462</div>
+            </div>
+            <div class="mt-auto">
+              <!-- <p class="price-tag">Rs. 725</p> -->
+               <p class="price-tag">Rs. <span class="priceValue">749</span></p>
+              <div class="d-grid gap-2">
+                <a href="https://www.daraz.pk/products/dermacos-glow-cleanser-deep-exfoliating-cleanser-for-smooth-soft-skin-200g-jar-i889035462.html"
+                  class="btn btn-primary" target="_blank">
+                  <i class="fas fa-shopping-cart me-1"></i> Buy Now
+                </a>
+                <!-- Empty link field with comment -->
+                <a href="#" class="empty-link">
+                  <!-- Add product comparison link here when available -->
+                  <i class="fas fa-balance-scale me-1"></i> Add to Compare (Link not available)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="col">
+        <div class="card product-card h-100">
+          <div class="position-relative">
+            <!-- Using a placeholder image for product 3 -->
+            <img src="https://dermacospakistan.pk/wp-content/uploads/2024/07/Dermacos-Hexagonal-Cleanser-500gm.jpg"
+              class="card-img-top product-image" alt="Dermacos Hexagonal Cleanser">
+            <span class="position-absolute top-0 start-0 m-2 badge bg-success">In Stock</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Dermacos Hexagonal Cleanser</h5>
+            <p class="card-text">Hexagonal textured cleanser for complete deep cleaning. Effectively removes dirt and
+              impurities for refreshed skin.</p>
+            <div class="product-meta mb-2">
+              <div><strong>SKU:</strong> 611333285_PK-2840416364</div>
+              <div><strong>Item ID:</strong> 611333285</div>
+            </div>
+            <div class="mt-auto">
+              <!-- <p class="price-tag">Rs. 749</p> -->
+               <p class="price-tag">Rs. <span class="priceValue">749</span></p>
+              <div class="d-grid gap-2">
+                <a href="https://www.daraz.pk/products/-i611333285.html" class="btn btn-primary" target="_blank">
+                  <i class="fas fa-shopping-cart me-1"></i> Buy Now
+                </a>
+                <!-- Empty link field with comment -->
+                <a href="#" class="empty-link">
+                  <!-- Add product comparison link here when available -->
+                  <i class="fas fa-balance-scale me-1"></i> Add to Compare (Link not available)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 4 -->
+      <div class="col">
+        <div class="card product-card h-100">
+          <div class="position-relative">
+            <!-- Using a placeholder image for product 4 -->
+            <img
+              src="https://dermacospakistan.pk/wp-content/uploads/2024/07/Dermacos-Cooling-Cucumber-Cleanser-200gm-768x768.jpg"
+              class="card-img-top product-image" alt="Dermacos Dermapure Cooling Cucumber Cleanser">
+            <span class="position-absolute top-0 start-0 m-2 badge bg-success">In Stock</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Dermacos Dermapure Cooling Cucumber Cleanser</h5>
+            <p class="card-text">Cooling cucumber cleanser that refreshes and revitalizes your skin. Perfect for a
+              cooling and soothing cleansing experience.</p>
+            <div class="product-meta mb-2">
+              <div><strong>SKU:</strong> 922616033_PK-3979001091</div>
+              <div><strong>Item ID:</strong> 922616033</div>
+            </div>
+            <div class="mt-auto">
+              <!-- <p class="price-tag">Rs. 711</p> -->
+              <p class="price-tag">Rs. <span class="priceValue">749</span></p>
+              <div class="d-grid gap-2">
+                <a href="https://www.daraz.pk/products/-i922616033.html" class="btn btn-primary" target="_blank">
+                  <i class="fas fa-shopping-cart me-1"></i> Buy Now
+                </a>
+                <!-- Empty link field with comment -->
+                <a href="#" class="empty-link">
+                  <!-- Add product comparison link here when available -->
+                  <i class="fas fa-balance-scale me-1"></i> Add to Compare (Link not available)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="col">
+        <div class="card product-card h-100">
+          <div class="position-relative">
+            <!-- Using a placeholder image for product 5 -->
+            <img
+              src="https://dermacospakistan.pk/wp-content/uploads/2024/07/Dermacos-Cooling-Cucumber-Cleanser-200gm-768x768.jpg"
+              class="card-img-top product-image" alt="Dermacos Dermapure Cooling Cucumber Cleanser">
+            <span class="position-absolute top-0 start-0 m-2 badge bg-success">In Stock</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Dermacos Dermapure Cooling Cucumber Cleanser</h5>
+            <p class="card-text">Cooling cucumber cleanser that refreshes and revitalizes your skin. Perfect for a
+              cooling and soothing cleansing experience.</p>
+            <div class="product-meta mb-2">
+              <div><strong>SKU:</strong> 911674157_PK-3952450691</div>
+              <div><strong>Item ID:</strong> 911674157</div>
+            </div>
+            <div class="mt-auto">
+              <!-- <p class="price-tag">Rs. 709</p> -->
+               <p class="price-tag">Rs. <span class="priceValue">749</span></p>
+              <div class="d-grid gap-2">
+                <a href="https://www.daraz.pk/products/-i911674157.html" class="btn btn-primary" target="_blank">
+                  <i class="fas fa-shopping-cart me-1"></i> Buy Now
+                </a>
+                <!-- Empty link field with comment -->
+                <a href="#" class="empty-link">
+                  <!-- Add product comparison link here when available -->
+                  <i class="fas fa-balance-scale me-1"></i> Add to Compare (Link not available)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="col">
+        <div class="card product-card h-100">
+          <div class="position-relative">
+            <!-- Using a placeholder image for product 6 -->
+            <img src="https://dermacospakistan.pk/wp-content/uploads/2024/07/Dermacos-Hexagonal-Cleanser-500gm.jpg"
+              class="card-img-top product-image" alt="Dermacos Detoxifying Hexagonal Cleanser 200g">
+            <span class="position-absolute top-0 start-0 m-2 badge bg-success">In Stock</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Dermacos Detoxifying Hexagonal Cleanser 200g</h5>
+            <p class="card-text">Detoxifying hexagonal cleanser for deep pore cleansing. Removes toxins and impurities
+              for healthier looking skin.</p>
+            <div class="product-meta mb-2">
+              <div><strong>SKU:</strong> 678233031_PK-3206259752</div>
+              <div><strong>Item ID:</strong> 678233031</div>
+            </div>
+            <div class="mt-auto">
+              <!-- <p class="price-tag">Rs. 750</p> -->
+               <p class="price-tag">Rs. <span class="priceValue">749</span></p>
+              <div class="d-grid gap-2">
+                <a href="https://www.daraz.pk/products/200-i678233031.html" class="btn btn-primary" target="_blank">
+                  <i class="fas fa-shopping-cart me-1"></i> Buy Now
+                </a>
+                <!-- Empty link field with comment -->
+                <a href="#" class="empty-link">
+                  <!-- Add product comparison link here when available -->
+                  <i class="fas fa-balance-scale me-1"></i> Add to Compare (Link not available)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 7 -->
+      <div class="col">
+        <div class="card product-card h-100">
+          <div class="position-relative">
+            <!-- Using a placeholder image for product 7 -->
+            <img src="https://dermacospakistan.pk/wp-content/uploads/2024/07/Dermacos-Hexagonal-Cleanser-500gm.jpg"
+              class="card-img-top product-image"
+              alt="Dermacos Hexagonal Cleanser | Hexagonal textured cleanser for complete deep cleaning | 200g">
+            <span class="position-absolute top-0 start-0 m-2 badge bg-success">In Stock</span>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Dermacos Hexagonal Cleanser | Hexagonal textured cleanser for complete deep cleaning
+              | 200g</h5>
+            <p class="card-text">Hexagonal textured cleanser for complete deep cleaning. Effectively removes dirt and
+              impurities for refreshed skin.</p>
+            <div class="product-meta mb-2">
+              <div><strong>SKU:</strong> 468883984_PK-2214379363</div>
+              <div><strong>Item ID:</strong> 468883984</div>
+            </div>
+            <div class="mt-auto">
+              <!-- <p class="price-tag">Rs. 733</p> -->
+               <p class="price-tag">Rs. <span class="priceValue">749</span></p>
+              <div class="d-grid gap-2">
+                <a href="https://www.daraz.pk/products/-i468883984.html" class="btn btn-primary" target="_blank">
+                  <i class="fas fa-shopping-cart me-1"></i> Buy Now
+                </a>
+                <!-- Empty link field with comment -->
+                <a href="#" class="empty-link">
+                  <!-- Add product comparison link here when available -->
+                  <i class="fas fa-balance-scale me-1"></i> Add to Compare (Link not available)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Product pagination" class="mt-5">
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>Dermacos Products</h5>
+          <p>Premium skincare products for smooth and soft skin. We offer a wide range of cleansers and skincare
+            solutions.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white">Home</a></li>
+            <li><a href="#" class="text-white">All Products</a></li>
+            <li><a href="#" class="text-white">About Us</a></li>
+            <li><a href="#" class="text-white">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact Us</h5>
+          <ul class="list-unstyled">
+            <li><i class="fas fa-envelope me-2"></i> info@dermacos.com</li>
+            <li><i class="fas fa-phone me-2"></i> +92 300 1234567</li>
+            <li><i class="fas fa-map-marker-alt me-2"></i> Karachi, Pakistan</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="text-center">
+        <p>&copy; 2023 Dermacos Products. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+<script>
+document.getElementById('priceForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    
+    const formData = new FormData(this);
+    
+    fetch('/update_price', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update ALL price elements with class 'priceValue'
+        const priceElements = document.querySelectorAll('.priceValue');
+        priceElements.forEach(element => {
+            element.textContent = data.new_price;
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
+
+
+
+
+</body>
+
+</html>
