@@ -63,17 +63,17 @@ http://127.0.0.1:8000/
 
 ## 💻 How to Use
 
-On the front-end page, click “Scrape Competitors Products Prices”.
+1. On the front-end page, click “Scrape Competitors Products Prices”. <br>
 ![Product Interface](images/1.PNG)
 
-The system will automatically scrape all competitor products and display:
+2. The system will automatically scrape all competitor products and display:
 
-Pricing statistics (Average, Minimum, Maximum, Price Range, etc.)
+3. Pricing statistics (Average, Minimum, Maximum, Price Range, etc.) <br>
 ![Product Interface](images/2.PNG)
 
-Use the dropdown menu to select your preferred price option — Minimum, Maximum, or Average.
+4. Use the dropdown menu to select your preferred price option — Minimum, Maximum, or Average.
 
-Click “Update Prices” to update the product prices according to the calculated statistics.
+5. Click “Update Prices” to update the product prices according to the calculated statistics. <br>
 ![Product Interface](images/3.PNG)
 
 
