@@ -49,9 +49,9 @@ cd Automated-competitor-price-tracking
 pip install -r requirements.txt
 ```
 
-###  Run the Django Development Server
+###  Run the Project
 ```bash
-python manage.py runserver
+python app.py 
 ```
 
 ###  Open the Project in Your Browser
